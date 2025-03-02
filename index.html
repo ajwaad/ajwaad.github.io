@@ -2,22 +2,26 @@
 <html>
 <head>
     <style>
-        /* Outer transparent container */
+        /* Outer container with properly scaled background */
         .outer-container {
             position: relative;
             width: 100%;
             padding-top: 56.25%; /* 16:9 aspect ratio */
-            background: transparent; /* Fully transparent */
+            background: url('https://i.ibb.co/mVD3Pt9z/Add-a-subheading-4.png') no-repeat center center;
+            background-size: cover; /* Changed from fixed to responsive */
         }
 
-        /* Inner image container (2/3 size) */
+        /* Inner scrollable container */
         .inner-container {
             position: absolute;
-            top: 20px; /* Tiny top margin */
-            right: 20px; /* Tiny right margin */
-            width: 66.666%; /* 2/3 of outer container width */
-            padding-top: 37.5%; /* 2/3 of 16:9 height (56.25% * 2/3) */
+            top: 20px;
+            right: 20px;
+            width: 66.666%;
+            padding-top: 37.5%;
             overflow-y: auto;
+            z-index: 1;
+            background: white; /* Optional: Add background for better contrast */
+            border-radius: 8px; /* Optional: Match scrollbar rounding */
         }
 
         /* Image styling */
@@ -29,7 +33,7 @@
             height: auto;
         }
 
-        /* Scrollbar styling (same as before) */
+        /* Scrollbar styling (unchanged) */
         .inner-container::-webkit-scrollbar {
             width: 8px;
         }
