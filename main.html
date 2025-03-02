@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            overflow-y: auto;
+            border: 2px solid #ccc;
+            /* Removed container border-radius */
+        }
+
+        /* WebKit browsers (Chrome/Safari/Edge) */
+        .container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .container::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .container::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px; /* Rounded thumb */
+            border: 2px solid transparent; /* Prevents color overlap */
+            background-clip: content-box;
+        }
+
+        /* Firefox */
+        .container {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,0,0,0.3) rgba(0,0,0,0.1);
+        }
+
+        /* Firefox thumb rounding (limited support) */
+        @supports (-moz-appearance:none) {
+            .container scrollbar {
+                -moz-appearance: none;
+                border-radius: 8px;
+            }
+        }
+
+        .image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img 
+            src="https://i.ibb.co/Zpg0hd62/Infografik-Langkah-untuk-Membuat-Kawan-Gaya-Putih-Kekuningan-Hijau-Muda-Biru.jpg" 
+            alt="Infographic" 
+            class="image"
+        >
+    </div>
+</body>
+</html>
