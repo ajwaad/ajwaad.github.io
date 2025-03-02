@@ -1,9 +1,25 @@
-<!DOCTYPE html>
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<style>
+								body {
+									background-color: white; /* Ensure the iframe has a white background */
+								}
+
+								
+							</style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
 <html>
 <head>
     <style>
-        /* Outer container with background image */
+        /* Outer container for background */
         .outer-container {
+            display: none; /* Hidden by default */
             position: relative;
             width: 100%;
             padding-top: 56.25%; /* 16:9 aspect ratio */
@@ -19,33 +35,82 @@
             width: 66.666%;
             padding-top: 37.5%;
             overflow-y: auto;
-            z-index: 1;
             background: white;
-            border-radius: 8px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        /* Close button styling */
+        /* Professional close button */
         .close-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 2;
-            background: #ff4444;
-            color: white;
+            top: 15px;
+            right: 15px;
+            z-index: 3;
+            background: transparent;
             border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            color: #333;
+            font-size: 24px;
             cursor: pointer;
-            font-size: 18px;
+            padding: 8px;
+            transition: all 0.2s;
+            width: 32px; /* Fixed size */
+            height: 32px; /* Fixed size */
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .close-btn:hover {
-            background: #cc0000;
+            color: #666;
+        }
+
+        .close-btn::before,
+        .close-btn::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 2px;
+            transition: transform 0.2s; /* Smooth animation */
+        }
+
+        .close-btn::before {
+            transform: rotate(45deg);
+        }
+
+        .close-btn::after {
+            transform: rotate(-45deg);
+        }
+
+        .close-btn:hover::before {
+            transform: rotate(90deg); /* Rotate one bar */
+        }
+
+        .close-btn:hover::after {
+            transform: rotate(0deg); /* Rotate the other bar */
+        }
+
+        /* Scrollbar styling */
+        .inner-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .inner-container::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+        }
+
+        .inner-container::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
+
+        .inner-container {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,0,0,0.2) rgba(0,0,0,0.05);
         }
 
         /* Image styling */
@@ -57,41 +122,23 @@
             height: auto;
         }
 
-        /* Scrollbar styling */
-        .inner-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .inner-container::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
-        }
-
-        .inner-container::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.3);
-            border-radius: 8px;
-            border: 2px solid transparent;
-            background-clip: content-box;
-        }
-
-        .inner-container {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(0,0,0,0.3) rgba(0,0,0,0.1);
-        }
-
-        @supports (-moz-appearance:none) {
-            .inner-container scrollbar {
-                -moz-appearance: none;
-                border-radius: 8px;
-            }
+        /* Responsive image container */
+        #mainImage {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #000;
         }
     </style>
 </head>
 <body>
-    <div class="outer-container">
+    <!-- Main Image Interface -->
+    <img id="mainImage" src="https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png" usemap="#map1">
+
+    <!-- Scrollable Container -->
+    <div class="outer-container" id="scrollContainer">
         <div class="inner-container">
-            <!-- Close button -->
-            <button class="close-btn" onclick="returnToMain()">×</button>
-            
+            <button class="close-btn" onclick="closeScrollContainer()"></button>
             <img 
                 src="https://i.ibb.co/Zpg0hd62/Infografik-Langkah-untuk-Membuat-Kawan-Gaya-Putih-Kekuningan-Hijau-Muda-Biru.jpg" 
                 alt="Infographic" 
@@ -100,17 +147,20 @@
         </div>
     </div>
 
-    <!-- Original main image container -->
-    <img id="mainImage" src="https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png" usemap="#map1" style="border:1px solid #000;">
-
-    <!-- Maps -->
+    <!-- Image Maps -->
     <map name="map1">
+        <!-- First button (switches to Add-a-subheading-3.png) -->
         <area shape="rect" coords="662,110,1775,397" href="javascript:switchImage('https://i.ibb.co/cSt8hJBB/Add-a-subheading-3.png', 'map2')">
-        <area shape="rect" coords="664,531,1772,816" href="https://ajwaad.github.io/">
+        
+        <!-- Second button (opens scroll container) -->
+        <area shape="rect" coords="664,531,1772,816" href="javascript:openScrollContainer()">
     </map>
 
     <map name="map2">
+        <!-- Return button (circle) -->
         <area shape="circle" coords="1845,1012,37" href="javascript:switchImage('https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png', 'map1')">
+        
+        <!-- Return button (rectangle) -->
         <area shape="rect" coords="1666,973,1761,1049" href="javascript:switchImage('https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png', 'map1')">
     </map>
 
@@ -121,15 +171,26 @@
             img.useMap = `#${newMap}`;
         }
 
-        function returnToMain() {
-            // Hide the scrollable container
-            document.querySelector('.outer-container').style.display = 'none';
-            // Show main image
-            document.getElementById('mainImage').style.display = 'block';
+        function openScrollContainer() {
+            // Hide main image and show scroll container
+            document.getElementById('mainImage').style.display = 'none';
+            document.getElementById('scrollContainer').style.display = 'block';
         }
 
-        // Initially hide main image when scrollable container is shown
-        document.getElementById('mainImage').style.display = 'none';
+        function closeScrollContainer() {
+            // Show main image and hide scroll container
+            document.getElementById('mainImage').style.display = 'block';
+            document.getElementById('scrollContainer').style.display = 'none';
+        }
     </script>
 </body>
 </html>
+
+
+
+							<script>
+                            	
+							</script>
+                        </body>
+                        </html>
+                    
