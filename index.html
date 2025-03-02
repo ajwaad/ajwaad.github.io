@@ -2,45 +2,25 @@
 <html>
 <head>
     <style>
-        .container {
+        /* Outer transparent container */
+        .outer-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            background: transparent; /* Fully transparent */
+        }
+
+        /* Inner image container (2/3 size) */
+        .inner-container {
+            position: absolute;
+            top: 20px; /* Tiny top margin */
+            right: 20px; /* Tiny right margin */
+            width: 66.666%; /* 2/3 of outer container width */
+            padding-top: 37.5%; /* 2/3 of 16:9 height (56.25% * 2/3) */
             overflow-y: auto;
-            border: 2px solid #ccc;
-            /* Removed container border-radius */
         }
 
-        /* WebKit browsers (Chrome/Safari/Edge) */
-        .container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .container::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
-        }
-
-        .container::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.3);
-            border-radius: 8px; /* Rounded thumb */
-            border: 2px solid transparent; /* Prevents color overlap */
-            background-clip: content-box;
-        }
-
-        /* Firefox */
-        .container {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(0,0,0,0.3) rgba(0,0,0,0.1);
-        }
-
-        /* Firefox thumb rounding (limited support) */
-        @supports (-moz-appearance:none) {
-            .container scrollbar {
-                -moz-appearance: none;
-                border-radius: 8px;
-            }
-        }
-
+        /* Image styling */
         .image {
             position: absolute;
             top: 0;
@@ -48,15 +28,45 @@
             width: 100%;
             height: auto;
         }
+
+        /* Scrollbar styling (same as before) */
+        .inner-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .inner-container::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .inner-container::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
+
+        .inner-container {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,0,0,0.3) rgba(0,0,0,0.1);
+        }
+
+        @supports (-moz-appearance:none) {
+            .inner-container scrollbar {
+                -moz-appearance: none;
+                border-radius: 8px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img 
-            src="https://i.ibb.co/Zpg0hd62/Infografik-Langkah-untuk-Membuat-Kawan-Gaya-Putih-Kekuningan-Hijau-Muda-Biru.jpg" 
-            alt="Infographic" 
-            class="image"
-        >
+    <div class="outer-container">
+        <div class="inner-container">
+            <img 
+                src="https://i.ibb.co/Zpg0hd62/Infografik-Langkah-untuk-Membuat-Kawan-Gaya-Putih-Kekuningan-Hijau-Muda-Biru.jpg" 
+                alt="Infographic" 
+                class="image"
+            >
+        </div>
     </div>
 </body>
 </html>
