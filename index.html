@@ -2,13 +2,13 @@
 <html>
 <head>
     <style>
-        /* Outer container with properly scaled background */
+        /* Outer container with background image */
         .outer-container {
             position: relative;
             width: 100%;
             padding-top: 56.25%; /* 16:9 aspect ratio */
             background: url('https://i.ibb.co/mVD3Pt9z/Add-a-subheading-4.png') no-repeat center center;
-            background-size: cover; /* Changed from fixed to responsive */
+            background-size: cover;
         }
 
         /* Inner scrollable container */
@@ -20,8 +20,32 @@
             padding-top: 37.5%;
             overflow-y: auto;
             z-index: 1;
-            background: white; /* Optional: Add background for better contrast */
-            border-radius: 8px; /* Optional: Match scrollbar rounding */
+            background: white;
+            border-radius: 8px;
+        }
+
+        /* Close button styling */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .close-btn:hover {
+            background: #cc0000;
         }
 
         /* Image styling */
@@ -33,7 +57,7 @@
             height: auto;
         }
 
-        /* Scrollbar styling (unchanged) */
+        /* Scrollbar styling */
         .inner-container::-webkit-scrollbar {
             width: 8px;
         }
@@ -65,6 +89,9 @@
 <body>
     <div class="outer-container">
         <div class="inner-container">
+            <!-- Close button -->
+            <button class="close-btn" onclick="returnToMain()">×</button>
+            
             <img 
                 src="https://i.ibb.co/Zpg0hd62/Infografik-Langkah-untuk-Membuat-Kawan-Gaya-Putih-Kekuningan-Hijau-Muda-Biru.jpg" 
                 alt="Infographic" 
@@ -72,5 +99,37 @@
             >
         </div>
     </div>
+
+    <!-- Original main image container -->
+    <img id="mainImage" src="https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png" usemap="#map1" style="border:1px solid #000;">
+
+    <!-- Maps -->
+    <map name="map1">
+        <area shape="rect" coords="662,110,1775,397" href="javascript:switchImage('https://i.ibb.co/cSt8hJBB/Add-a-subheading-3.png', 'map2')">
+        <area shape="rect" coords="664,531,1772,816" href="https://ajwaad.github.io/">
+    </map>
+
+    <map name="map2">
+        <area shape="circle" coords="1845,1012,37" href="javascript:switchImage('https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png', 'map1')">
+        <area shape="rect" coords="1666,973,1761,1049" href="javascript:switchImage('https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png', 'map1')">
+    </map>
+
+    <script>
+        function switchImage(newSrc, newMap) {
+            const img = document.getElementById('mainImage');
+            img.src = newSrc;
+            img.useMap = `#${newMap}`;
+        }
+
+        function returnToMain() {
+            // Hide the scrollable container
+            document.querySelector('.outer-container').style.display = 'none';
+            // Show main image
+            document.getElementById('mainImage').style.display = 'block';
+        }
+
+        // Initially hide main image when scrollable container is shown
+        document.getElementById('mainImage').style.display = 'none';
+    </script>
 </body>
 </html>
