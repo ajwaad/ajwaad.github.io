@@ -1,33 +1,26 @@
-
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-							<style>
-								body {
-									background-color: white; /* Ensure the iframe has a white background */
-								}
-
-								
-							</style>
-                        </head>
-                        <body>
-                            <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
         /* Outer container for background */
         .outer-container {
-            display: none; /* Hidden by default */
-            position: fixed; /* Fixed positioning to cover the viewport */
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: url('https://i.ibb.co/mVD3Pt9z/Add-a-subheading-4.png') no-repeat center center;
             background-size: cover;
-            z-index: 10; /* Ensure it's above other elements when visible */
+            z-index: 10;
         }
 
         /* Inner scrollable container */
@@ -35,8 +28,8 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            width: 66.666%; /* 2/3 of viewport width */
-            padding-top: 37.5%; /* Maintain 16:9 aspect ratio */
+            width: 66.666%;
+            padding-top: 37.5%;
             overflow-y: auto;
             background: white;
             border-radius: 12px;
@@ -56,8 +49,8 @@
             cursor: pointer;
             padding: 8px;
             transition: all 0.2s;
-            width: 32px; /* Fixed size */
-            height: 32px; /* Fixed size */
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -75,24 +68,13 @@
             height: 2px;
             background: currentColor;
             border-radius: 2px;
-            transition: transform 0.2s; /* Smooth animation */
+            transition: transform 0.2s;
         }
 
-        .close-btn::before {
-            transform: rotate(45deg);
-        }
-
-        .close-btn::after {
-            transform: rotate(-45deg);
-        }
-
-        .close-btn:hover::before {
-            transform: rotate(90deg); /* Rotate one bar */
-        }
-
-        .close-btn:hover::after {
-            transform: rotate(0deg); /* Rotate the other bar */
-        }
+        .close-btn::before { transform: rotate(45deg); }
+        .close-btn::after { transform: rotate(-45deg); }
+        .close-btn:hover::before { transform: rotate(90deg); }
+        .close-btn:hover::after { transform: rotate(0deg); }
 
         /* Scrollbar styling */
         .inner-container::-webkit-scrollbar {
@@ -130,15 +112,15 @@
             display: block;
             max-width: 100%;
             height: auto;
-            border: none; /* Removed black outline */
-            z-index: 5; /* Ensure it's above other elements */
-            position: relative; /* Required for z-index to work */
+            border: none;
+            position: relative;
+            z-index: 5;
         }
     </style>
 </head>
 <body>
     <!-- Main Image Interface -->
-    <img id="mainImage" src="https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png" usemap="#map1">
+    <img id="mainImage" src="https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png" usemap="#map1" onload="setupResponsiveMap(this, 'map1')">
 
     <!-- Scrollable Container -->
     <div class="outer-container" id="scrollContainer">
@@ -154,48 +136,70 @@
 
     <!-- Image Maps -->
     <map name="map1">
-        <!-- First button (switches to Add-a-subheading-3.png) -->
         <area shape="rect" coords="650,100,1760,400" href="javascript:switchImage('https://i.ibb.co/cSt8hJBB/Add-a-subheading-3.png', 'map2')">
-        
-        <!-- Second button (opens scroll container) -->
         <area shape="rect" coords="650,520,1760,820" href="javascript:openScrollContainer()">
     </map>
 
     <map name="map2">
-        <!-- Return button (circle) -->
         <area shape="circle" coords="1845,1012,37" href="javascript:switchImage('https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png', 'map1')">
-        
-        <!-- Return button (rectangle) -->
         <area shape="rect" coords="1666,973,1761,1049" href="javascript:switchImage('https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png', 'map1')">
     </map>
 
     <script>
+        function setupResponsiveMap(img, mapName) {
+            const map = document.querySelector(`map[name="${mapName}"]`);
+            const areas = map.getElementsByTagName('area');
+            const originalCoords = [];
+
+            // Store original coordinates and image dimensions
+            const naturalWidth = img.naturalWidth;
+            const naturalHeight = img.naturalHeight;
+
+            for (const area of areas) {
+                originalCoords.push({
+                    shape: area.shape,
+                    coords: area.coords.split(',').map(Number)
+                });
+            }
+
+            function updateCoords() {
+                const currentWidth = img.clientWidth;
+                const currentHeight = img.clientHeight;
+                const scaleX = currentWidth / naturalWidth;
+                const scaleY = currentHeight / naturalHeight;
+
+                for (let i = 0; i < areas.length; i++) {
+                    const orig = originalCoords[i];
+                    const scaledCoords = orig.coords.map((coord, index) => {
+                        return Math.round(coord * (index % 2 === 0 ? scaleX : scaleY));
+                    });
+                    areas[i].coords = scaledCoords.join(',');
+                }
+            }
+
+            // Update coordinates on resize
+            window.addEventListener('resize', updateCoords);
+            updateCoords(); // Initial call
+        }
+
         function switchImage(newSrc, newMap) {
             const img = document.getElementById('mainImage');
             img.src = newSrc;
             img.useMap = `#${newMap}`;
+            img.onload = function() {
+                setupResponsiveMap(img, newMap);
+            };
         }
 
         function openScrollContainer() {
-            // Hide main image and show scroll container
             document.getElementById('mainImage').style.display = 'none';
             document.getElementById('scrollContainer').style.display = 'block';
         }
 
         function closeScrollContainer() {
-            // Show main image and hide scroll container
             document.getElementById('mainImage').style.display = 'block';
             document.getElementById('scrollContainer').style.display = 'none';
         }
     </script>
 </body>
 </html>
-
-
-
-							<script>
-                            	
-							</script>
-                        </body>
-                        </html>
-                    
