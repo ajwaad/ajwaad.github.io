@@ -2,14 +2,6 @@
 <html>
 <head>
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
         /* Outer container for background */
         .outer-container {
             display: none;
@@ -77,22 +69,17 @@
         .close-btn:hover::after { transform: rotate(0deg); }
 
         /* Scrollbar styling */
-        .inner-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
+        .inner-container::-webkit-scrollbar { width: 8px; }
         .inner-container::-webkit-scrollbar-track {
             background: rgba(0,0,0,0.05);
             border-radius: 10px;
         }
-
         .inner-container::-webkit-scrollbar-thumb {
             background: rgba(0,0,0,0.2);
             border-radius: 8px;
             border: 2px solid transparent;
             background-clip: content-box;
         }
-
         .inner-container {
             scrollbar-width: thin;
             scrollbar-color: rgba(0,0,0,0.2) rgba(0,0,0,0.05);
@@ -120,7 +107,7 @@
 </head>
 <body>
     <!-- Main Image Interface -->
-    <img id="mainImage" src="https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png" usemap="#map1" onload="setupResponsiveMap(this, 'map1')">
+    <img id="mainImage" src="https://i.ibb.co/N6jtkvp7/Add-a-subheading-2.png" usemap="#map1">
 
     <!-- Scrollable Container -->
     <div class="outer-container" id="scrollContainer">
@@ -146,60 +133,82 @@
     </map>
 
     <script>
-        function setupResponsiveMap(img, mapName) {
-            const map = document.querySelector(`map[name="${mapName}"]`);
-            const areas = map.getElementsByTagName('area');
-            const originalCoords = [];
+        // Track original coordinates and dimensions
+        const imageMaps = {
+            'map1': [
+                { shape: 'rect', coords: [650, 100, 1760, 400] },
+                { shape: 'rect', coords: [650, 520, 1760, 820] }
+            ],
+            'map2': [
+                { shape: 'circle', coords: [1845, 1012, 37] },
+                { shape: 'rect', coords: [1666, 973, 1761, 1049] }
+            ]
+        };
 
-            // Store original coordinates and image dimensions
-            const naturalWidth = img.naturalWidth;
-            const naturalHeight = img.naturalHeight;
-
-            for (const area of areas) {
-                originalCoords.push({
-                    shape: area.shape,
-                    coords: area.coords.split(',').map(Number)
+        // Initialize mappings
+        function initializeMaps() {
+            const maps = document.querySelectorAll('map');
+            maps.forEach(map => {
+                const areas = map.querySelectorAll('area');
+                areas.forEach((area, index) => {
+                    area.dataset.originalCoords = imageMaps[map.name][index].coords.join(',');
                 });
-            }
-
-            function updateCoords() {
-                const currentWidth = img.clientWidth;
-                const currentHeight = img.clientHeight;
-                const scaleX = currentWidth / naturalWidth;
-                const scaleY = currentHeight / naturalHeight;
-
-                for (let i = 0; i < areas.length; i++) {
-                    const orig = originalCoords[i];
-                    const scaledCoords = orig.coords.map((coord, index) => {
-                        return Math.round(coord * (index % 2 === 0 ? scaleX : scaleY));
-                    });
-                    areas[i].coords = scaledCoords.join(',');
-                }
-            }
-
-            // Update coordinates on resize
-            window.addEventListener('resize', updateCoords);
-            updateCoords(); // Initial call
+            });
         }
 
+        // Scale coordinates on resize
+        function scaleCoordinates() {
+            const img = document.getElementById('mainImage');
+            const currentMapName = img.useMap.replace('#', '');
+            const map = document.querySelector(`map[name="${currentMapName}"]`);
+            
+            if (!map) return;
+
+            const scaleX = img.offsetWidth / img.naturalWidth || 1;
+            const scaleY = img.offsetHeight / img.naturalHeight || 1;
+
+            map.querySelectorAll('area').forEach(area => {
+                const original = area.dataset.originalCoords.split(',').map(Number);
+                const scaled = original.map((coord, i) => 
+                    Math.round(coord * (i % 2 === 0 ? scaleX : scaleY))
+                );
+                area.coords = scaled.join(',');
+            });
+        }
+
+        // Switch image and update mappings
         function switchImage(newSrc, newMap) {
             const img = document.getElementById('mainImage');
             img.src = newSrc;
             img.useMap = `#${newMap}`;
-            img.onload = function() {
-                setupResponsiveMap(img, newMap);
+
+            img.onload = () => {
+                scaleCoordinates();
+                initializeMaps(); // Reinitialize for new map
             };
         }
 
+        // Open scroll container
         function openScrollContainer() {
             document.getElementById('mainImage').style.display = 'none';
             document.getElementById('scrollContainer').style.display = 'block';
         }
 
+        // Close scroll container
         function closeScrollContainer() {
             document.getElementById('mainImage').style.display = 'block';
             document.getElementById('scrollContainer').style.display = 'none';
         }
+
+        // Event listeners
+        window.addEventListener('load', () => {
+            initializeMaps();
+            scaleCoordinates();
+        });
+
+        window.addEventListener('resize', () => {
+            scaleCoordinates();
+        });
     </script>
 </body>
 </html>
