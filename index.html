@@ -5,11 +5,14 @@
         /* Outer container for background */
         .outer-container {
             display: none; /* Hidden by default */
-            position: relative;
+            position: fixed; /* Fixed positioning to cover the viewport */
+            top: 0;
+            left: 0;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 aspect ratio */
+            height: 100%;
             background: url('https://i.ibb.co/mVD3Pt9z/Add-a-subheading-4.png') no-repeat center center;
             background-size: cover;
+            z-index: 10; /* Ensure it's above other elements when visible */
         }
 
         /* Inner scrollable container */
@@ -113,6 +116,8 @@
             max-width: 100%;
             height: auto;
             border: 1px solid #000;
+            z-index: 5; /* Ensure it's above other elements */
+            position: relative; /* Required for z-index to work */
         }
     </style>
 </head>
